@@ -78,6 +78,10 @@ func normalizePublicSetting(setting model.PublicSetting) model.PublicSetting {
 		enabled := true
 		setting.ModelChannel.AllowCustomChannel = &enabled
 	}
+	if setting.Auth.AllowRegister == nil {
+		enabled := true
+		setting.Auth.AllowRegister = &enabled
+	}
 	return setting
 }
 

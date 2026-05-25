@@ -59,6 +59,14 @@ func EnsureDefaultAdmin() error {
 }
 
 func Register(username string, password string) (model.AuthSession, error) {
+	settings, err := repository.GetSettings()
+	if err != nil {
+		return model.AuthSession{}, err
+	}
+	normalizedSettings := normalizeSettings(settings)
+	if normalizedSettings.Public.Auth.AllowRegister != nil && !*normalizedSettings.Public.Auth.AllowRegister {
+		return model.AuthSession{}, safeMessageError{message: "当前未开放注册"}
+	}
 	username = strings.TrimSpace(username)
 	if strings.ContainsAny(username, " \t\r\n") {
 		return model.AuthSession{}, safeMessageError{message: "用户名不能包含空格"}
@@ -163,6 +171,9 @@ func LoginWithLinuxDo(r *http.Request, code string, state string) (model.AuthSes
 		return model.AuthSession{}, redirect, err
 	}
 	if !ok {
+		if settings.Public.Auth.AllowRegister != nil && !*settings.Public.Auth.AllowRegister {
+			return model.AuthSession{}, redirect, safeMessageError{message: "当前未开放注册"}
+		}
 		user = model.User{
 			ID:          newID("user"),
 			Username:    linuxDoUsername(profile.Username, linuxDoID),

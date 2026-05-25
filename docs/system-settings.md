@@ -22,6 +22,12 @@
     "defaultTextModel": "gpt-5.5",
     "systemPrompt": "",
     "allowCustomChannel": true
+  },
+  "auth": {
+    "allowRegister": true,
+    "linuxDo": {
+      "enabled": false
+    }
   }
 }
 ```
@@ -29,6 +35,7 @@
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
 | `modelChannel` | object | 模型渠道公开配置组 |
+| `auth` | object | 认证相关公开配置 |
 
 `modelChannel` 字段：
 
@@ -55,6 +62,13 @@
 | --- | --- |
 | 云端渠道 | 使用后端 `/api/v1/*` 代理接口，请求会按模型名匹配 `private.value.channels` 中的可用渠道 |
 | 本地直连 | 默认可选；`allowCustomChannel` 关闭后不可选，用户在浏览器本地配置 `baseUrl`、`apiKey` 和模型列表后直接请求模型接口 |
+
+`auth` 字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `allowRegister` | boolean | 是否允许用户注册，默认允许；关闭后注册入口隐藏，注册接口拒绝新用户创建 |
+| `linuxDo.enabled` | boolean | 是否开启 Linux.do 登录 |
 
 ## private.value
 

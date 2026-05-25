@@ -186,6 +186,7 @@ export type AdminModelCost = {
 export type AdminPublicSettings = {
     modelChannel: AdminPublicModelChannelSettings;
     auth: {
+        allowRegister: boolean;
         linuxDo: {
             enabled: boolean;
         };

@@ -32,6 +32,7 @@ function LoginContent() {
     const setSession = useUserStore((state) => state.setSession);
     const isLoading = useUserStore((state) => state.isLoading);
     const linuxDoEnabled = useConfigStore((state) => state.publicSettings?.auth?.linuxDo?.enabled === true);
+    const allowRegister = useConfigStore((state) => state.publicSettings?.auth?.allowRegister !== false);
     const [mode, setMode] = useState<"login" | "register">("login");
     const redirect = searchParams.get("redirect") || "/";
 
@@ -48,8 +49,16 @@ function LoginContent() {
         });
     }, [message, redirect, router, searchParams, setSession]);
 
+    useEffect(() => {
+        if (!allowRegister && mode === "register") setMode("login");
+    }, [allowRegister, mode]);
+
     const submit = async (values: LoginFormValues) => {
         try {
+            if (mode === "register" && !allowRegister) {
+                message.error("当前未开放注册");
+                return;
+            }
             if (mode === "register" && values.password !== values.confirmPassword) {
                 message.error("两次输入的密码不一致");
                 return;
@@ -87,10 +96,7 @@ function LoginContent() {
                             block
                             value={mode}
                             onChange={(value) => setMode(value as "login" | "register")}
-                            options={[
-                                { label: "登录", value: "login" },
-                                { label: "注册", value: "register" },
-                            ]}
+                            options={allowRegister ? [{ label: "登录", value: "login" }, { label: "注册", value: "register" }] : [{ label: "登录", value: "login" }]}
                         />
                     </Form.Item>
                     <Form.Item name="username" label={<span className="font-medium text-stone-800 dark:text-stone-200">用户名</span>} rules={[{ required: true, message: "请输入用户名" }]}>
@@ -104,7 +110,7 @@ function LoginContent() {
                             <Input.Password prefix={<LockOutlined />} autoComplete="new-password" />
                         </Form.Item>
                     ) : null}
-                    <Space direction="vertical" size={12} style={{ width: "100%" }}>
+                    <Space orientation="vertical" size={12} style={{ width: "100%" }}>
                         <Button block type="primary" htmlType="submit" loading={isLoading}>
                             {mode === "register" ? "注册" : "登录"}
                         </Button>

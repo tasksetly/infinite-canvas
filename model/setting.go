@@ -46,7 +46,8 @@ type PublicSetting struct {
 }
 
 type PublicAuthSetting struct {
-	LinuxDo PublicLinuxDoAuthSetting `json:"linuxDo"`
+	AllowRegister *bool                    `json:"allowRegister"`
+	LinuxDo       PublicLinuxDoAuthSetting `json:"linuxDo"`
 }
 
 type PublicLinuxDoAuthSetting struct {

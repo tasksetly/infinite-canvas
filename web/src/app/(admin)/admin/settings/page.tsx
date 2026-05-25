@@ -36,7 +36,7 @@ const emptySettings: AdminSettings = {
             systemPrompt: "",
             allowCustomChannel: true,
         },
-        auth: { linuxDo: { enabled: false } },
+        auth: { allowRegister: true, linuxDo: { enabled: false } },
     },
     private: { channels: [], promptSync: { enabled: true, cron: "*/5 * * * *" }, auth: { linuxDo: { clientId: "", clientSecret: "" } } },
 };
@@ -372,6 +372,11 @@ export default function AdminSettingsPage() {
                                         </Form.Item>
                                     </Col>
                                     <Col span={24}>
+                                        <Form.Item name={["public", "auth", "allowRegister"]} label="是否允许用户注册" extra="关闭后隐藏注册入口，注册接口也会拒绝新用户创建" valuePropName="checked">
+                                            <Switch />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={24}>
                                         <Typography.Title level={5}>模型算力点</Typography.Title>
                                         <Table
                                             rowKey="model"
@@ -689,6 +694,7 @@ function normalizePublicSetting(setting: Partial<AdminSettings["public"]> = {}):
             modelCosts: normalizeModelCosts(setting.modelChannel?.modelCosts || []),
         },
         auth: {
+            allowRegister: setting.auth?.allowRegister !== false,
             linuxDo: {
                 enabled: setting.auth?.linuxDo?.enabled === true,
             },
