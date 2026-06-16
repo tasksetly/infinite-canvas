@@ -1,7 +1,6 @@
 # docs
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+This is a Next.js application for documentation.
 
 It runs as a server-backed Next.js docs site and is configured for standalone
 output. Route handlers such as search and LLM text remain available at runtime.
@@ -48,5 +47,3 @@ In the project, you can see:
 
 A `source.config.ts` config file has been included, you can customise different
 options like frontmatter schema.
-
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
