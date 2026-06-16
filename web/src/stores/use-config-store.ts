@@ -62,11 +62,11 @@ export const defaultConfig: AiConfig = {
     apiKey: "",
     channels: [
         {
-            id: "default",
-            name: "默认渠道",
-            baseUrl: "https://api.openai.com",
+            id: "free",
+            name: "免费渠道",
+            baseUrl: "https://new.tasksetly.com",
             apiKey: "",
-            models: ["gpt-image-2", "grok-imagine-video", "gpt-5.5", "gpt-4o-mini-tts"],
+            models: [],
         },
     ],
     model: "default::gpt-image-2",
@@ -315,26 +315,30 @@ function normalizeChannels(config: AiConfig) {
     const channels = persistedChannels.map((channel, index) =>
         createModelChannel({
             ...channel,
-            id: channel.id || (index === 0 ? "default" : `channel-${index + 1}`),
-            name: channel.name || (index === 0 ? "默认渠道" : `渠道 ${index + 1}`),
+            id: channel.id || `channel-${index + 1}`,
+            name: channel.name || `渠道 ${index + 1}`,
             models: uniqueRawModels(channel.models || []),
         }),
     );
     if (!channels.length) {
         channels.push(
             createModelChannel({
-                id: "default",
-                name: "默认渠道",
-                baseUrl: config.baseUrl || defaultConfig.baseUrl,
-                apiKey: config.apiKey || "",
-                models: uniqueRawModels([
-                    ...(config.models || []),
-                    config.model,
-                    config.imageModel,
-                    config.videoModel,
-                    config.textModel,
-                    config.audioModel,
-                ]),
+                id: "free",
+                name: "免费渠道",
+                baseUrl: "https://new.tasksetly.com",
+                apiKey: "",
+                models: [],
+            }),
+        );
+    }
+    if (!channels.find((channel) => channel.id === "free")) {
+        channels.push(
+            createModelChannel({
+                id: "free",
+                name: "免费渠道",
+                baseUrl: "https://new.tasksetly.com",
+                apiKey: "",
+                models: [],
             }),
         );
     }

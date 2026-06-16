@@ -97,6 +97,10 @@ export function AppConfigModal() {
     };
 
     const deleteChannel = (id: string) => {
+        if (id === "free") {
+            message.warning("免费渠道不可删除");
+            return;
+        }
         if (config.channels.length <= 1) {
             message.warning("至少保留一个渠道");
             return;
@@ -251,7 +255,9 @@ export function AppConfigModal() {
                                                     <Button size="small" loading={loadingChannelId === channel.id} onClick={() => void refreshChannelModels(channel)}>
                                                         拉取模型
                                                     </Button>
-                                                    <Button size="small" danger icon={<Trash2 className="size-3.5" />} onClick={() => deleteChannel(channel.id)} />
+                                                    {channel.id !== "free" ? (
+                                                        <Button size="small" danger icon={<Trash2 className="size-3.5" />} onClick={() => deleteChannel(channel.id)} />
+                                                    ) : null}
                                                 </div>
                                             </div>
                                             <div className="grid gap-4 md:grid-cols-2">
@@ -262,7 +268,14 @@ export function AppConfigModal() {
                                                     <Input value={channel.baseUrl} onChange={(event) => updateChannel(channel.id, { baseUrl: event.target.value })} />
                                                 </Form.Item>
                                                 <Form.Item label="API Key" className="mb-0">
-                                                    <Input.Password value={channel.apiKey} onChange={(event) => updateChannel(channel.id, { apiKey: event.target.value })} />
+                                                    <div className="flex items-center gap-2">
+                                                        <Input.Password value={channel.apiKey} onChange={(event) => updateChannel(channel.id, { apiKey: event.target.value })} className="flex-1" />
+                                                        {channel.id === "free" ? (
+                                                            <a href="https://new.tasksetly.com" target="_blank" rel="noopener noreferrer" className="shrink-0 rounded-md bg-blue-600 px-2 py-1 text-xs font-medium text-white transition hover:bg-blue-700">
+                                                                点击获取
+                                                            </a>
+                                                        ) : null}
+                                                    </div>
                                                 </Form.Item>
                                                 <Form.Item label="模型列表" className="mb-0">
                                                     <Select mode="tags" showSearch allowClear maxTagCount="responsive" placeholder="输入模型名，或点击拉取模型" value={channel.models} onChange={(models) => updateChannel(channel.id, { models })} />
