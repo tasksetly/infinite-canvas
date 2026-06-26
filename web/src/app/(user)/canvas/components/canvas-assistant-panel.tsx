@@ -44,10 +44,6 @@ const GENERATION_OPTION_PROPERTIES = {
     vquality: { type: "string" },
     generateAudio: { type: "string" },
     watermark: { type: "string" },
-    audioVoice: { type: "string" },
-    audioFormat: { type: "string" },
-    audioSpeed: { type: "string" },
-    audioInstructions: { type: "string" },
 };
 const CANVAS_OP_SCHEMA = {
     type: "object",
@@ -1029,10 +1025,6 @@ function configNodeOp(id: string, input: Record<string, unknown>, x: number, y: 
             vquality: stringOptional(input.vquality) || config.vquality,
             generateAudio: stringOptional(input.generateAudio) || config.videoGenerateAudio,
             watermark: stringOptional(input.watermark) || config.videoWatermark,
-            audioVoice: stringOptional(input.audioVoice) || config.audioVoice,
-            audioFormat: stringOptional(input.audioFormat) || config.audioFormat,
-            audioSpeed: stringOptional(input.audioSpeed) || config.audioSpeed,
-            audioInstructions: stringOptional(input.audioInstructions) || config.audioInstructions,
         }) as CanvasNodeData["metadata"],
     };
 }
@@ -1195,7 +1187,6 @@ function generationTitle(mode: "text" | "image" | "video" | "audio") {
 function defaultGenerationModel(config: AiConfig, mode: "text" | "image" | "video" | "audio") {
     if (mode === "image") return config.imageModel || config.model;
     if (mode === "video") return config.videoModel || config.model;
-    if (mode === "audio") return config.audioModel || config.model;
     return config.textModel || config.model;
 }
 

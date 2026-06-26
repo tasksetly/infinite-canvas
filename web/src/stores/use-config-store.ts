@@ -22,11 +22,6 @@ export type AiConfig = {
     imageModel: string;
     videoModel: string;
     textModel: string;
-    audioModel: string;
-    audioVoice: string;
-    audioFormat: string;
-    audioSpeed: string;
-    audioInstructions: string;
     videoSeconds: string;
     vquality: string;
     videoGenerateAudio: string;
@@ -36,7 +31,6 @@ export type AiConfig = {
     imageModels: string[];
     videoModels: string[];
     textModels: string[];
-    audioModels: string[];
     quality: string;
     size: string;
     count: string;
@@ -53,7 +47,7 @@ export type WebdavSyncConfig = {
 };
 
 export const CONFIG_STORE_KEY = "infinite-canvas:ai_config_store";
-export type ModelCapability = "image" | "video" | "text" | "audio";
+export type ModelCapability = "image" | "video" | "text";
 const CHANNEL_MODEL_SEPARATOR = "::";
 
 export const defaultConfig: AiConfig = {
@@ -73,11 +67,6 @@ export const defaultConfig: AiConfig = {
     imageModel: "default::gpt-image-2",
     videoModel: "default::grok-imagine-video",
     textModel: "default::gpt-5.5",
-    audioModel: "default::gpt-4o-mini-tts",
-    audioVoice: "alloy",
-    audioFormat: "mp3",
-    audioSpeed: "1",
-    audioInstructions: "",
     videoSeconds: "6",
     vquality: "720",
     videoGenerateAudio: "true",
@@ -87,7 +76,6 @@ export const defaultConfig: AiConfig = {
     imageModels: ["default::gpt-image-2"],
     videoModels: ["default::grok-imagine-video"],
     textModels: ["default::gpt-5.5"],
-    audioModels: ["default::gpt-4o-mini-tts"],
     quality: "auto",
     size: "1:1",
     count: "1",
@@ -153,7 +141,7 @@ export function selectableModelsByCapability(config: AiConfig, capability?: Mode
 }
 
 function modelListKey(capability: ModelCapability) {
-    return `${capability}Models` as "imageModels" | "videoModels" | "textModels" | "audioModels";
+    return `${capability}Models` as "imageModels" | "videoModels" | "textModels";
 }
 
 function isAiConfigReady(config: AiConfig, model: string) {
@@ -209,11 +197,6 @@ export const useConfigStore = create<ConfigStore>()(
                         imageModel: normalizeModelOptionValue(config.imageModel || config.model, channels),
                         videoModel: normalizeModelOptionValue(config.videoModel || "grok-imagine-video", channels),
                         textModel: normalizeModelOptionValue(config.textModel || config.model, channels),
-                        audioModel: normalizeModelOptionValue(config.audioModel || defaultConfig.audioModel, channels),
-                        audioVoice: config.audioVoice || defaultConfig.audioVoice,
-                        audioFormat: config.audioFormat || defaultConfig.audioFormat,
-                        audioSpeed: config.audioSpeed || defaultConfig.audioSpeed,
-                        audioInstructions: config.audioInstructions || "",
                         videoSeconds: config.videoSeconds || "6",
                         vquality: config.vquality || "720",
                         videoGenerateAudio: config.videoGenerateAudio || "true",
@@ -222,7 +205,6 @@ export const useConfigStore = create<ConfigStore>()(
                         imageModels: Array.isArray(persistedConfig.imageModels) ? normalizeModelList(config.imageModels, channels) : filterModelsByCapability(models, "image"),
                         videoModels: Array.isArray(persistedConfig.videoModels) ? normalizeModelList(config.videoModels, channels) : filterModelsByCapability(models, "video"),
                         textModels: Array.isArray(persistedConfig.textModels) ? normalizeModelList(config.textModels, channels) : filterModelsByCapability(models, "text"),
-                        audioModels: Array.isArray(persistedConfig.audioModels) ? normalizeModelList(config.audioModels, channels) : filterModelsByCapability(models, "audio"),
                     },
                 };
             },
