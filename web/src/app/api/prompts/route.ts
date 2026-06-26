@@ -1,7 +1,22 @@
 import type { NextRequest } from "next/server";
+import { readFileSync, existsSync } from "fs";
+import { join } from "path";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+// 加载图片映射（如果存在）
+const imageMapPath = join(process.cwd(), "data", "prompt-images-map.json");
+let imageMap: Record<string, string> = {};
+if (existsSync(imageMapPath)) {
+    try {
+        imageMap = JSON.parse(readFileSync(imageMapPath, "utf-8"));
+    } catch {}
+}
+
+function mapImageUrl(url: string): string {
+    return imageMap[url] || url;
+}
 
 type Prompt = {
     id: string;
@@ -105,7 +120,7 @@ async function buildGptImage2Prompts() {
     data.forEach((item) => {
         const prompt = cases.get(item.tweet_url || "");
         if (!item.title || !prompt || !item.image_dir) return;
-        const image = `${gptImage2RawBase}/${item.image_dir}/output.jpg`;
+        const image = mapImageUrl(`${gptImage2RawBase}/${item.image_dir}/output.jpg`);
         items.push({ id: `gpt-image-2-prompts-${leftPad(items.length + 1)}`, title: item.title, coverUrl: image, prompt, tags: tagsFromCategory(item.category || ""), preview: markdownPreview([image]), createdAt: item.added_at || "", updatedAt: item.added_at || "" });
     });
     return items;
@@ -166,7 +181,7 @@ async function buildDavidWuGptImage2Prompts() {
             const title = (item.title_cn || item.title_en || "").trim();
             const prompt = (item.prompt || "").trim();
             if (!title || !prompt) return null;
-            const image = absoluteImage(davidWuGptImage2RawBase, item.image || "");
+            const image = mapImageUrl(absoluteImage(davidWuGptImage2RawBase, item.image || ""));
             const preview = [item.title_en, item.note, image ? `![](${image})` : ""].filter(Boolean).join("\n\n");
             return defaultPrompt(`davidwu-gpt-image2-prompts-${leftPad(item.id || index + 1)}`, title, prompt, image, davidWuTags(item), preview);
         })
@@ -206,7 +221,7 @@ function firstMatch(value: string, pattern: RegExp) {
 }
 
 function extractMarkdownImages(baseUrl: string, markdown: string) {
-    return Array.from(markdown.matchAll(/!\[[^\]]*]\(([^)]+)\)/g), (match) => absoluteImage(baseUrl, match[1])).filter(Boolean);
+    return Array.from(markdown.matchAll(/!\[[^\]]*]\(([^)]+)\)/g), (match) => mapImageUrl(absoluteImage(baseUrl, match[1]))).filter(Boolean);
 }
 
 function absoluteImage(baseUrl: string, image: string) {
