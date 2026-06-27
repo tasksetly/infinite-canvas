@@ -9,7 +9,7 @@
         "start": "next start",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
-        "sync:prompts-images": "node scripts/sync-prompts-images.mjs"
+        "sync:prompts": "node scripts/sync-prompts.mjs"
     },
     "dependencies": {
         "@ant-design/icons": "^6.1.1",
