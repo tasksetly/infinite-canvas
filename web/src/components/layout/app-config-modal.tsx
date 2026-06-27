@@ -268,7 +268,7 @@ export function AppConfigModal() {
                                                     <div className="flex items-center gap-2">
                                                         <Input.Password value={channel.apiKey} onChange={(event) => updateChannel(channel.id, { apiKey: event.target.value })} className="flex-1" />
                                                         {channel.id === "free" ? (
-                                                            <a href="https://new.tasksetly.com" target="_blank" rel="noopener noreferrer" className="shrink-0 rounded-md bg-blue-600 px-2 py-1 text-xs font-medium text-white transition hover:bg-blue-700">
+                                                            <a href="https://ai.tasksetly.com" target="_blank" rel="noopener noreferrer" className="shrink-0 rounded-md bg-blue-600 px-2 py-1 text-xs font-medium text-white transition hover:bg-blue-700">
                                                                 点击获取
                                                             </a>
                                                         ) : null}

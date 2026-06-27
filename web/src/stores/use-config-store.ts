@@ -58,7 +58,7 @@ export const defaultConfig: AiConfig = {
         {
             id: "free",
             name: "免费渠道",
-            baseUrl: "https://new.tasksetly.com",
+            baseUrl: "https://ai.tasksetly.com",
             apiKey: "",
             models: [],
         },
@@ -307,7 +307,7 @@ function normalizeChannels(config: AiConfig) {
             createModelChannel({
                 id: "free",
                 name: "免费渠道",
-                baseUrl: "https://new.tasksetly.com",
+                baseUrl: "https://ai.tasksetly.com",
                 apiKey: "",
                 models: [],
             }),
@@ -318,7 +318,7 @@ function normalizeChannels(config: AiConfig) {
             createModelChannel({
                 id: "free",
                 name: "免费渠道",
-                baseUrl: "https://new.tasksetly.com",
+                baseUrl: "https://ai.tasksetly.com",
                 apiKey: "",
                 models: [],
             }),
