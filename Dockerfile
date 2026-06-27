@@ -18,6 +18,7 @@ COPY CHANGELOG.md /app/CHANGELOG.md
 COPY --from=web-build /app/web/public /app/web/public
 COPY --from=web-build /app/web/.next/standalone /app/web
 COPY --from=web-build /app/web/.next/static /app/web/.next/static
+COPY web/data /app/web/data
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
